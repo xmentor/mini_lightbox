@@ -29,16 +29,16 @@
         lb_container.classList.add("lb-container");
         lb_container.id = "lb-container";
         lb_container.innerHTML = `<button id="lb-close" class='lb-close' title='Zamknij okno'>
-                                        <img src='lb-img/cancel.png' alt='Close ikon' width="35" height="35">
-                                        <!--<span class='lb-visuallyhidden'>Zamknij okno</span>-->
+                                        <span class='lb-visuallyhidden'>Zamknij okno</span>
                                   </button>
                                   <img src='${this.srcImg}' alt='${this.desc}' style='max-height: ${imgHeight}px; max-width: ${imgWidth}px;' class='lb-img' id='lb-img'>
                                   <p class='lb-title'>${this.desc}</p>`;
     
         d.body.appendChild(lb_container); d.body.insertBefore(lb_container, d.body.firstChild);
         d.body.appendChild(lb_background); d.body.insertBefore(lb_background, d.body.firstChild);
-        d.getElementById("lb-img").addEventListener("load", () => {
+        d.getElementById("lb-img").addEventListener("load", function () {
             lb_container.classList.add("lb-fade");
+            this.classList.add("lb-fade");
         }, false);
     };
     [...d.querySelectorAll("[data-lightbox]")].forEach((thumbClick) => {

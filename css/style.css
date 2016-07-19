@@ -8,14 +8,6 @@
   position: absolute;
   width: 1px;
 }
-.fade {
-  opacity: 1;
-  transition: all 0.4s linear;
-  -webkit-transition: all 0.4s linear;
-  -moz-transition: all 0.4s linear;
-  -o-transition: all 0.4s linear;
-  -ms-transition: all 0.4s linear;
-}
 .lb-background {
   position: fixed;
   width: 100%;
@@ -45,8 +37,7 @@
   padding: 3px;
   border-radius: 3px;
   background-color: #fff;
-  opacity: 1;
-    display: none;
+  opacity: 0;
 }
 .lb-container .lb-img {
   border-radius: 3px;
@@ -76,4 +67,12 @@
   font-family: Arial, sans-serif;
   font-size: 1.2em;
   color: #fff;
+}
+.lb-fade {
+  opacity:1;
+  transition: all 0.5s linear;
+  -webkit-transition: all 0.5s linear;
+  -moz-transition: all 0.5s linear;
+  -o-transition: all 0.5s linear;
+  -ms-transition: all 0.5s linear;
 }

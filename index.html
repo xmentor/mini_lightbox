@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="pl">
+    <head>
+        <meta charset="utf-8">
+        <title>Mini lightbox | Demo</title>
+        <meta name="description" content="">
+        <meta name="keywords" content="">
+        <meta name="author" content="">
+        <link rel="stylesheet" href="css/style.css">
+        <style>
+            body{margin: 0;}
+            .photo-list{
+                margin: 0;
+                padding: 0;
+                list-style: none;
+                display: flex;
+                justify-content: center;
+            }
+            .photo-list .item-photo{
+                margin: 5px;
+            }
+        </style>
+    </head>
+    <body>
+        <ul class="photo-list">
+            <li class="item-photo">
+                <a class="link-photo" data-lightbox="Img" title="Sky1" href="demo/sky1.jpg">
+                    <img class="photo" src="demo/sky1th.jpg" alt="Sky1">
+                </a>
+            </li>
+            <li class="item-photo">
+                <a class="link-photo" data-lightbox="Img" title="Sky2" href="demo/sky2.jpg">
+                    <img class="photo" src="demo/sky2th.jpg" alt="Sky2">
+                </a>
+            </li>
+            <li class="item-photo">
+                <a class="link-photo" data-lightbox="Img" title="Sky3" href="demo/sky3.jpg">
+                    <img class="photo" src="demo/sky3th.jpg" alt="Sky3">
+                </a>
+            </li>
+            <li class="item-photo">
+                <a class="link-photo" data-lightbox="Img" title="Sky4" href="demo/sky4.jpg">
+                    <img class="photo" src="demo/sky4th.jpg" alt="Sky4">
+                </a>
+            </li>
+        </ul>
+        <script src="js/main.js"></script>
+    </body>
+</html>

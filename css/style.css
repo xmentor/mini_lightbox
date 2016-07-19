@@ -46,6 +46,7 @@
   border-radius: 3px;
   background-color: #fff;
   opacity: 1;
+    display: none;
 }
 .lb-container .lb-img {
   border-radius: 3px;

@@ -30,9 +30,6 @@
   z-index: 9999;
   opacity: 1;
 }
-.lb-background:hover {
-  cursor: pointer;
-}
 .lb-container {
   position: fixed;
   z-index: 10001;

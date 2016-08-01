@@ -23,19 +23,17 @@
             var fadeOut = () => {
                 container.style.opacity = +(container.style.opacity || w.getComputedStyle(container).getPropertyValue("opacity"));
                 background.style.opacity = +(background.style.opacity || w.getComputedStyle(background).getPropertyValue("opacity"));
-                var task = () => {
-                    container.style.opacity = +container.style.opacity - 1/20;
-                    background.style.opacity = +background.style.opacity - 1/20;
-                    if((+container.style.opacity > 0) && (+background.style.opacity > 0)) {
-                        (w.requestAnimationFrame && requestAnimationFrame(task)) || setTimeout(task, 1000/60);
+                (function task() {
+                    container.style.opacity = +container.style.opacity - 1 / 20;
+                    background.style.opacity = +background.style.opacity - 1 / 20;
+                    if ((+container.style.opacity > 0) && (+background.style.opacity > 0)) {
+                        (w.requestAnimationFrame && requestAnimationFrame(task)) || setTimeout(task, 1000 / 60);
                     } else {
                         container.remove();
                         background.remove();
                     }
-                    
-                }
-                task();
-            }
+                }());
+            };
             
             background.addEventListener("click", fadeOut, false);
             d.getElementById("lb-close").addEventListener("click", fadeOut, false);  
@@ -69,15 +67,13 @@
             var fadeIn = () => {
                 lb_container.style.opacity = +(lb_container.style.opacity || w.getComputedStyle(lb_container).getPropertyValue("opacity"));
                 lb_img.style.opacity = +(lb_img.style.opacity || w.getComputedStyle(lb_img).getPropertyValue("opacity"));
-                var task = () => {
+                (function task () {
                     lb_container.style.opacity = +lb_container.style.opacity + 1/20;
                     lb_img.style.opacity = +lb_img.style.opacity + 1/20;
                     if((+lb_container.style.opacity < 1) && (+lb_img.style.opacity < 1)) {
                         (w.requestAnimationFrame && requestAnimationFrame(task)) || setTimeout(task, 1000/60);
                     }
-                    
-                }
-                task();
+                }());
             }
             
             lb_img.addEventListener("load", function () {

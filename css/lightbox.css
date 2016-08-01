@@ -126,6 +126,7 @@
   color: #eee;
   font-family: sans-serif;
 }
+/*
 .lb-fadeIn {
   opacity:1;
   transition: opacity 0.5s linear .1s;
@@ -138,3 +139,4 @@
   -webkit-transition: opacity 0.5s linear;
   -moz-transition: opacity 0.5s linear;
 }
+*/

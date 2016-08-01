@@ -10,14 +10,31 @@
         destroy () {
             var container = d.getElementById("lb-container"),
                 background = d.getElementById("lb-background");
-
-            function fadeOut() {
+            /*    
+            var fadeOut = () => {
                 container.classList.add("lb-fadeOut");
                 background.classList.add("lb-fadeOut");
                 setTimeout(() => {       
                     container.remove();
                     background.remove();
                 }, 500);
+            }
+            */
+            var fadeOut = () => {
+                container.style.opacity = +(container.style.opacity || w.getComputedStyle(container).getPropertyValue("opacity"));
+                background.style.opacity = +(background.style.opacity || w.getComputedStyle(background).getPropertyValue("opacity"));
+                var task = () => {
+                    container.style.opacity = +container.style.opacity - 1/20;
+                    background.style.opacity = +background.style.opacity - 1/20;
+                    if((+container.style.opacity > 0) && (+background.style.opacity > 0)) {
+                        (w.requestAnimationFrame && requestAnimationFrame(task)) || setTimeout(task, 1000/60);
+                    } else {
+                        container.remove();
+                        background.remove();
+                    }
+                    
+                }
+                task();
             }
             
             background.addEventListener("click", fadeOut, false);
@@ -47,15 +64,29 @@
             d.body.appendChild(lb_load);
             d.body.appendChild(lb_container);
             d.body.appendChild(lb_background);
-
-            d.getElementById("lb-img").addEventListener("load", function () {
+                
+            var lb_img = d.getElementById("lb-img");
+            var fadeIn = () => {
+                lb_container.style.opacity = +(lb_container.style.opacity || w.getComputedStyle(lb_container).getPropertyValue("opacity"));
+                lb_img.style.opacity = +(lb_img.style.opacity || w.getComputedStyle(lb_img).getPropertyValue("opacity"));
+                var task = () => {
+                    lb_container.style.opacity = +lb_container.style.opacity + 1/20;
+                    lb_img.style.opacity = +lb_img.style.opacity + 1/20;
+                    if((+lb_container.style.opacity < 1) && (+lb_img.style.opacity < 1)) {
+                        (w.requestAnimationFrame && requestAnimationFrame(task)) || setTimeout(task, 1000/60);
+                    }
+                    
+                }
+                task();
+            }
+            
+            lb_img.addEventListener("load", function () {
                 lb_load.remove();
-                lb_container.classList.add("lb-fadeIn");
-                this.classList.add("lb-fadeIn");             
+                fadeIn();          
             }, false);  
         }
     };
-    [...d.querySelectorAll("[data-lightbox]")].forEach((thumbnail) =>  {
+    Array.prototype.forEach.call(d.querySelectorAll("[data-lightbox]"), (thumbnail) => {
         thumbnail.addEventListener("click", function (e) {
             e.preventDefault();
             var lb = new Lightbox(this.href, this.title);

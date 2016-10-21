@@ -1,0 +1,22 @@
+{
+  "name": "mini_lightbox",
+  "version": "1.0.0",
+  "description": "[Demo](https://xmentor.github.io/mini_lightbox/)",
+  "main": "js/lightbox.js",
+  "scripts": {
+    "lint": "eslint */**.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/xmentor/mini_lightbox.git"
+  },
+  "author": "Kamil Kondratowicz",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/xmentor/mini_lightbox/issues"
+  },
+  "homepage": "https://github.com/xmentor/mini_lightbox#readme",
+  "devDependencies": {
+    "eslint": "^3.8.1"
+  }
+}

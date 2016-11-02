@@ -11,32 +11,33 @@
                 background = d.getElementById('lb-background'),
                 activeEl = d.activeElement,
                 fadeOut = () => {
-                    container.style.opacity = Number(container.style.opacity || w.getComputedStyle(container)[ 'opacity' ]);
                     background.style.opacity = Number(background.style.opacity || w.getComputedStyle(background)[ 'opacity' ]);
                     (function task() {
-                        container.style.opacity = Number(container.style.opacity) - .1;
                         background.style.opacity = Number(background.style.opacity) - .1;
-                        if ((Number(container.style.opacity) > 0) && (Number(background.style.opacity) > 0)) {
+                        if (Number(background.style.opacity) > 0) {
                             (w.requestAnimationFrame && requestAnimationFrame(task)) || setTimeout(task, 16);
                         } else {
+                            background.parentNode.removeChild(background);
+                            d.removeEventListener('click', clickHandler);
+                            d.removeEventListener('keydown', keyHandler);
                             activeEl.focus();
-                            container.remove();
-                            background.remove();
                         }
                     }());
+                },
+                keyHandler = (e) => {
+                    if (e.keyCode === 27) {
+                        fadeOut();
+                    }
+                    return false;
+                },
+                clickHandler = (e) => {
+                    if (e.target.classList.contains("lb-background") || e.target.classList.contains("lb-container__close")) {
+                        fadeOut();
+                    }
+                    return false;
                 };
-
-            background.addEventListener('click', (e) => {
-                if (e.target.className !== 'lb-container__img') {
-                    fadeOut();
-                }
-            }, false);
-            d.getElementById('lb-close').addEventListener('click', fadeOut, false);
-            d.addEventListener('keyup', (e) => {
-                if (e.keyCode === 27) {
-                    fadeOut();
-                }
-            }, false);
+            d.addEventListener('click', clickHandler);
+            d.addEventListener('keydown', keyHandler);
         }
         init() {
             const lbBackground = d.createElement('div'),
@@ -56,7 +57,7 @@
                                             <img src='${this.srcImg}' alt='screenshot' style='max-height: ${maxImgHeight}px; max-width: ${maxImgWidth}px;' class='lb-container__img' id='lb-img'>
                                         </div>
                                         <p class='lb-background__info' id='lb-info'>
-                                            <span class='lb-visuallyhidden'>Otworzono powiększenie, naciśnij ESC, aby je zamknąć</span>
+                                            <span class='lb-visuallyhidden'>Naciśnij ESC, aby zamknać powiększenie</span>
                                         </p>`;
 
             frag.appendChild(lbLoad);
@@ -66,6 +67,7 @@
             const lbImg = d.getElementById('lb-img'),
                 lbContainer = d.getElementById('lb-container'),
                 fadeIn = () => {
+                    lbLoad.parentNode.removeChild(lbLoad);
                     lbContainer.style.opacity = Number(lbContainer.style.opacity || w.getComputedStyle(lbContainer)[ 'opacity' ]);
                     lbImg.style.opacity = Number(lbImg.style.opacity || w.getComputedStyle(lbImg)[ 'opacity' ]);
                     (function task() {
@@ -73,21 +75,22 @@
                         lbImg.style.opacity = Number(lbImg.style.opacity) + .1;
                         if ((Number(lbContainer.style.opacity) < 1) && (Number(lbImg.style.opacity) < 1)) {
                             (w.requestAnimationFrame && requestAnimationFrame(task)) || setTimeout(task, 16);
+                        } else {
+                            lbContainer.focus();
                         }
                     }());
                 };
 
-            lbImg.addEventListener('load', () => {
-                lbLoad.remove();
-                fadeIn();
-                lbContainer.focus();
-            }, false);
+            lbImg.addEventListener('load', fadeIn);
         }
     }
-    Array.from(d.querySelectorAll('[data-lightbox]')).forEach((thumbnail) => {
-        thumbnail.addEventListener('click', (e) => {
+    for (let thumbnails = d.querySelectorAll('[data-lightbox]'), i = 0, len = thumbnails.length; i < len; ++i){
+        thumbnails[i].addEventListener('click', function(e) {;
+            if (!this.href) {
+                return false;
+            }
             e.preventDefault();
-            new Lightbox(e.target.parentNode.href);
-        }, false);
-    });
+            new Lightbox(this.href); 
+        });
+    }
 }(document, window));

@@ -7,8 +7,7 @@
             this.destroy();
         }
         destroy() {
-            const container = d.getElementById('lb-container'),
-                background = d.getElementById('lb-background'),
+            const background = d.getElementById('lb-background'),
                 activeEl = d.activeElement,
                 fadeOut = () => {
                     background.style.opacity = Number(background.style.opacity || w.getComputedStyle(background)[ 'opacity' ]);
@@ -31,7 +30,7 @@
                     return false;
                 },
                 clickHandler = (e) => {
-                    if (e.target.classList.contains("lb-background") || e.target.classList.contains("lb-container__close")) {
+                    if (e.target.classList.contains('lb-background') || e.target.classList.contains('lb-container__close')) {
                         fadeOut();
                     }
                     return false;
@@ -51,14 +50,14 @@
             lbBackground.classList.add('lb-background');
             lbBackground.id = 'lb-background';
             lbBackground.innerHTML = `<div id='lb-container' class='lb-container' role='dialog' aria-describedby='lb-info' tabindex='-1'>
-                                            <button id='lb-close' class='lb-container__close' title='Zamknij okno'>
-                                                <span class='lb-visuallyhidden'>Zamknij okno</span>
+                                            <button id='lb-close' class='lb-container__close' aria-label='Zamknij okno'>
+                                                <span aria-hidden='true'>&times;</span>
                                             </button>
                                             <img src='${this.srcImg}' alt='screenshot' style='max-height: ${maxImgHeight}px; max-width: ${maxImgWidth}px;' class='lb-container__img' id='lb-img'>
-                                        </div>
-                                        <p class='lb-background__info' id='lb-info'>
-                                            <span class='lb-visuallyhidden'>Naciśnij ESC, aby zamknać powiększenie</span>
-                                        </p>`;
+                                            <p class='lb-background__info' id='lb-info'>
+                                                <span class='lb-visuallyhidden'>Naciśnij ESC, aby zamknać powiększenie</span>
+                                            </p>
+                                        </div>`;
 
             frag.appendChild(lbLoad);
             frag.appendChild(lbBackground);
@@ -85,12 +84,12 @@
         }
     }
     for (let thumbnails = d.querySelectorAll('[data-lightbox]'), i = 0, len = thumbnails.length; i < len; ++i){
-        thumbnails[i].addEventListener('click', function(e) {;
+        thumbnails[ i ].addEventListener('click', function(e) {
             if (!this.href) {
                 return false;
             }
             e.preventDefault();
-            new Lightbox(this.href); 
+            new Lightbox(this.href);
         });
     }
 }(document, window));

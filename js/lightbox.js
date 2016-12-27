@@ -6,7 +6,7 @@
             this.init();
         }
         destroy(beforeActive) {
-            const background = d.getElementById('lb-background'),
+            var background = d.getElementById('lb-background'),
                 fadeOut = () => {
                     background.style.opacity = Number(background.style.opacity || 
                                                       window.getComputedStyle(background)['opacity']);
@@ -24,7 +24,7 @@
                     task();
                 },
                 keyHandler = (e) => {
-                    if (e.keyCode === 27) {
+                    if ((e.keyCode === 27) || (e.keyCode === 9)) {
                         fadeOut();
                     }
                     return false;

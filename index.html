@@ -6,45 +6,99 @@
         <meta name="description" content="">
         <meta name="keywords" content="">
         <meta name="author" content="">
+        <link rel="stylesheet" href="css/lightbox.min.css">
         <style>
-            body{margin: 0;}
-            .photo-list{
+            body{
+                margin: 0;
+                font-family: sans-serif;
+                color: #333;
+                background: #efefef;
+            }
+            header{
+                padding: 15px 0;
+                text-align: center;
+            }
+            h1{
+                margin: 0;
+                font-size: 3em;
+            }
+            main{
+                width: 768px;
+                margin: 5px auto;
+            }
+            h2{
+                margin-left: 10px;
+            }
+            ul{
                 margin: 0;
                 padding: 0;
                 list-style: none;
+                
                 display: flex;
-                justify-content: center;              
+                justify-content: center;
+                align-items: center;
+                flex-wrap: wrap;
             }
-            .photo-list .item{
-                margin: 5px;
+            li{
+                margin: 2px;
+            }
+            a{
+                display: block;
+            }
+            img{
+                display: block;
+                min-width: 100%;
+            }
+            footer{
+                text-align: center;
+            }
+            @media (max-width: 768px) {
+                main{
+                    width: 100%;
+                }
             }
         </style>
     </head>
     <body>
-        <ul class="photo-list">
-            <li class="item">
-                <a class="link-photo" data-lightbox="Img"  href="demo/sky1.jpg" title="Kliknij, aby powiększyć">
-                    <img class="photo" src="demo/sky1th.jpg" alt="demo">
-                </a>
-            </li>
-            <li class="item">
-                <a class="link-photo" data-lightbox="Img" href="demo/sky2.jpg" title="Kliknij, aby powiększyć">
-                    <img class="photo" src="demo/sky2th.jpg" alt="demo">
-                </a>
-            </li>
-            <li class="item">
-                <a class="link-photo" data-lightbox="Img" href="demo/full1.jpeg" title="Kliknij, aby powiększyć">
-                    <img class="photo" src="demo/full1th.jpeg" alt="demo">
-                </a>
-            </li>
-            <li class="item">
-                <a class="link-photo" data-lightbox="Img" href="demo/full2.jpg" title="Kliknij, aby powiększyć">
-                    <img class="photo" src="demo/full2th.jpg" alt="demo">
-                </a>
-            </li>
-        </ul>
-        <link rel="stylesheet" href="css/lightbox.min.css">
+        <header>
+            <h1>
+                Mini Lightbox
+            </h1>
+        </header>
+        <main>
+            <section>
+                <h2>
+                    Galeria
+                </h2>
+                <ul>
+                    <li>
+                        <a class="link-photo" data-lightbox="img"  href="demo/bathtub.jpg" title="Powiększ zdjęcie">
+                            <img src="demo/bathtubTH.jpg" alt="demo">
+                        </a>
+                    </li>
+                    <li>
+                        <a class="link-photo" data-lightbox="img" href="demo/the-bath.jpg" title="Powiększ zdjęcie">
+                            <img src="demo/the-bathTH.jpg" alt="demo">
+                        </a>
+                    </li>
+                    <li>
+                        <a class="link-photo" data-lightbox="img" href="demo/children.jpg" title="Powiększ zdjęcie">
+                            <img src="demo/childrenTH.jpg" alt="demo">
+                        </a>
+                    </li>
+                    <li>
+                        <a class="link-photo" data-lightbox="img" href="demo/asia.jpg" title="Powiększ zdjęcie">
+                            <img src="demo/asiaTH.jpg" alt="demo">
+                        </a>
+                    </li>
+                </ul>
+            </section>
+        </main>
+        <footer>
+            <span>
+                Copyright &copy; 2016 Kamil Kondratowicz
+            </span>
+        </footer>
         <script src="js/lightbox.min.js"></script>
-        
     </body>
 </html>

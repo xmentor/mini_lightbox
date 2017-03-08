@@ -50,6 +50,11 @@
         document.addEventListener('keydown', keyHandler);
     };
     
+    const removeEvents = () => {
+        document.removeEventListener('click', clickHandler);
+        document.removeEventListener('keydown', keyHandler);
+    };
+    
     const removeLightBox = () => {
         const lightBox = document.querySelector('.lightbox');
         
@@ -58,11 +63,7 @@
             lightBox.parentNode.removeChild(lightBox);
         }, 200);
         activedElement.focus();
-    };
-    
-    const removeEvents = () => {
-        document.removeEventListener('click', clickHandler);
-        document.removeEventListener('keydown', keyHandler);
+        removeEvents();
     };
     
     const clickHandler = (e) => {
@@ -74,7 +75,6 @@
         // e.stopPropagation();
         e.preventDefault();
         
-        removeEvents();
         removeLightBox();
     };
     
@@ -88,7 +88,6 @@
         // e.stopPropagation();
         e.preventDefault();
         
-        removeEvents();
         removeLightBox();
     };
     
@@ -104,7 +103,7 @@
         appendToBody(lightBox);
     };
 
-    for(let thumbnails = document.querySelectorAll('[data-lightbox]'), thumnailsLen = thumbnails.length, i = 0; i < thumnailsLen; i++) {
+    for(let thumbnails = document.querySelectorAll('[data-lightbox]'), thumbnailsLen = thumbnails.length, i = 0; i < thumbnailsLen; i++) {
         thumbnails[i].addEventListener('click', function(e) {
             const href = this.href;
             if(!href || !/\.(gif|jpg|jpeg|tiff|png|bmp)$/i.test(href)) {

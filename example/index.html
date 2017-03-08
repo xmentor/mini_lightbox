@@ -6,7 +6,7 @@
         <meta name="description" content="">
         <meta name="keywords" content="">
         <meta name="author" content="">
-        <link rel="stylesheet" href="css/lightbox.min.css">
+        <link rel="stylesheet" href="css/lightbox.css">
         <style>
             body{
                 margin: 0;
@@ -23,7 +23,7 @@
                 font-size: 3em;
             }
             main{
-                width: 768px;
+                width: 100%;
                 margin: 5px auto;
             }
             h2{
@@ -52,14 +52,9 @@
             footer{
                 text-align: center;
             }
-            @media (max-width: 768px) {
+            @media (min-width: 768px){
                 main{
-                    width: 100%;
-                }
-            }
-            @media (max-width: 480px) {
-                main{
-                    width: 100%;
+                    width: 768px;
                 }
             }
         </style>
@@ -77,7 +72,7 @@
                 </h2>
                 <ul>
                     <li>
-                        <a class="link-photo" data-lightbox="img"  href="demo/bathtub.jpg" title="Powiększ zdjęcie">
+                        <a class="link-photo" data-lightbox="img" href="demo/bathtub.jpg" title="Powiększ zdjęcie">
                             <img src="demo/bathtubTH.jpg" alt="demo">
                         </a>
                     </li>
@@ -101,7 +96,7 @@
         </main>
         <footer>
             <span>
-                Copyright &copy; 2017 Kamil Kondratowicz
+                Copyright &copy; Kamil Kondratowicz
             </span>
         </footer>
         <script src="js/lightbox.min.js"></script>

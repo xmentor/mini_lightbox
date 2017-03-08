@@ -24,7 +24,7 @@
     <body>
         <!-- Znaczniki -->
         <!-- Inne skrypty -->
-        <script src="js/lightbox.min.js></script>
+        <script src="js/lightbox.min.js"></script>
     </body>
     ```
 

@@ -96,7 +96,7 @@
         showLightBox();
     };
     
-    const newLightBox = (srcImg, dataAlt = 'Screenshoot') => {
+    const newLightBox = (srcImg, dataAlt = '') => {
         const {width, height} = getWindowDimensions();
         const lightBox = createLightBox(srcImg, dataAlt, width, height);
         

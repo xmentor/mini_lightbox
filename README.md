@@ -28,6 +28,16 @@
     </body>
     ```
 
+* Owrapuj zdjęcie w link, który będzie posiadał atrybut `data-lightbox`(może być nawet pusty) oraz `href` z odnośnikiem do zdjęcia w orginalnym/większym rozmiarze:
+    
+    ```html
+    <a href="img/big-picture-adam.jpg" data-lightbox="">
+        <img src="img/small-picture-adam.jpg" alt="Adam">
+    </a>
+    ```
+    
+* Tekst alternatywny zdjęcia wyświetlanego w większym rozmiarze można(powinno się) zmienić przez dodanie atrybutu `data-alt` do znacznika `a`.
+
 ## Licencja
 
 [Licencja MIT](https://github.com/xmentor/mini_lightbox/blob/master/LICENSE)

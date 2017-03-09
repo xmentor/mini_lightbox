@@ -19,8 +19,7 @@ gulp.task('autoprefixer', function() {
 gulp.task('cssmin', ['autoprefixer'], function() {
     return gulp.src('dest/css/*.css')
         .pipe(cssmin())
-        .pipe(gulp.dest('dest/css'))
-        .pipe(gulp.dest('example/css'));
+        .pipe(gulp.dest('dest/css'));
 });
 gulp.task('lint', ['cssmin'], function() {
     return gulp.src('src/js/*.js')
@@ -42,8 +41,7 @@ gulp.task('jsCompiler', ['lint'], function() {
 gulp.task('replace', ['jsCompiler'], function() {
     return gulp.src(['./dest/js/lightbox.min.js'])
         .pipe(replace(/\\n\s+/g, ''))
-        .pipe(gulp.dest('./dest/js'))
-        .pipe(gulp.dest('./example/js'));
+        .pipe(gulp.dest('./dest/js'));
 });
 gulp.task('copy', ['replace'], function() {
    return gulp.src('src/lb-img/**')

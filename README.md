@@ -1,6 +1,6 @@
 # Mini Lightbox
 
-[Wersja demonstracyjna](https://xmentor.github.io/mini_lightbox/)
+[Wersja demonstracyjna](https://xmentor.github.io/mini_lightbox/example)
 
 ## Użycie
 

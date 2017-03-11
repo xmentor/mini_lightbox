@@ -1,0 +1,48 @@
+body {
+    margin: 0;
+    font-family: sans-serif;
+    color: #333;
+    background: #efefef;
+}
+header {
+    padding: 15px 0;
+    text-align: center;
+}
+h1 {
+    margin: 0;
+    font-size: 3em;
+}
+main {
+    width: 100%;
+    margin: 5px auto;
+}
+h2 {
+    margin-left: 10px;
+}
+ul {
+    margin: 0;
+    padding: 0;
+    list-style: none;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-wrap: wrap;
+}
+li {
+    margin: 2px;
+}
+a {
+    display: block;
+}
+li img {
+    display: block;
+    width: 100%;
+}
+footer {
+    text-align: center;
+}
+@media (min-width: 768px) {
+    main {
+        width: 768px;
+    }
+}

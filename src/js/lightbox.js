@@ -3,49 +3,56 @@
     
     let activedElement;
    
-    const getWindowDimensions = () => {
+    const getMaxDimensions = () => {
         const width = window.innerWidth - 50;
         const height = window.innerHeight - 100;
         
         return {width, height};
     };
     
-    const createLightBox = (src, alt, maxWidth, maxHeight) => {
+    const createLightBox = () => {
         const lightBox = document.createElement('div');
         
         lightBox.classList.add('lightbox');
+        lightBox.classList.add('lightbox_none');
+        lightBox.classList.add('lightbox_load');
         
-        lightBox.innerHTML = `<div class='lightbox__container' role='dialog' aria-labelledby='lb-img' aria-describedby='lb-info' tabindex='-1'>
-                                <button class='lightbox__close close'>
-                                    <img src='lb-img/close.png' alt='Zamknij okno' class='close__img'>
-                                </button>
-                                <img src='${src}' alt='${alt}' style='max-width: ${maxWidth}px; max-height: ${maxHeight}px;' class='lightbox__img' id='lb-img'>
-                                <p class='lightbox__info' id='lb-info'>
-                                    <span class='visuallyhidden'>Otworzono powiększenie zdjęcia. Naciśnij <kbd>ESC</kbd> lub <kbd>TAB</kbd>, aby zamknąć powiększenie.</span>
-                                </p>
-                              </div>`;
+        lightBox.innerHTML = '<div class="lightbox__container" role="dialog" aria-labelledby="lb-img" aria-describedby="lb-info" tabindex="-1"><button class="lightbox__close close"><img src="lb-img/close.png" alt="Zamknij okno" class="close__img"></button><img src="data:image/gif;base64,R0lGODlhAQABAIAAAP///////yH5BAEKAAEALAAAAAABAAEAAAICTAEAOw==" alt="" class="lightbox__img" id="lb-img"><p class="lightbox__info" id="lb-info"><span class="visuallyhidden">Otworzono powiększenie zdjęcia. Naciśnij <kbd>ESC</kbd> lub <kbd>TAB</kbd>, aby je zamknąć.</span></p></div>';
         
         return lightBox;
     };
-    
-    const showLightBox = () => {
+
+    const getElementsLightBox = () => {
         const lightBox = document.querySelector('.lightbox');
         const containerLightBox = document.querySelector('.lightbox__container');
         const imageLightBox = document.querySelector('.lightbox__img');
-        const showBox = () => {
-            lightBox.classList.add('fadeIn');
-            setTimeout(() => {
-                containerLightBox.classList.add('fadeIn');
-                containerLightBox.focus();
-                imageLightBox.classList.add('fadeIn');
-            }, 200);
-        };
         
-        if(imageLightBox.complete) {
-            showBox();
-        } else {
-            imageLightBox.addEventListener('load', showBox);
-        }
+        return {lightBox, containerLightBox, imageLightBox};
+    };
+    
+    const showLightBox = (src, alt) => {
+        const {lightBox, containerLightBox, imageLightBox} = getElementsLightBox();
+        const {width, height} = getMaxDimensions();
+        const newImage = new Image();
+
+        lightBox.classList.remove('lightbox_none');
+        
+        imageLightBox.style.maxWidth = `${width}px`;
+        imageLightBox.style.maxHeight = `${height}px`;
+        
+        newImage.onload = function() {
+            imageLightBox.src = this.src;
+            
+            lightBox.classList.remove('lightbox_load');
+
+            containerLightBox.classList.add('fadeIn');
+            imageLightBox.classList.add('fadeIn');
+            
+            containerLightBox.focus();
+        };
+        newImage.src = src;
+        newImage.alt = alt;
+        
         document.addEventListener('click', clickHandler);
         document.addEventListener('keydown', keyHandler);
     };
@@ -55,13 +62,18 @@
         document.removeEventListener('keydown', keyHandler);
     };
     
-    const removeLightBox = () => {
-        const lightBox = document.querySelector('.lightbox');
+    const hideLightBox = () => {
+        const {lightBox, containerLightBox, imageLightBox} = getElementsLightBox();
         
-        lightBox.classList.remove('fadeIn');
-        setTimeout(() => {
-            lightBox.parentNode.removeChild(lightBox);
-        }, 200);
+        lightBox.classList.add('lightbox_none');
+        lightBox.classList.add('lightbox_load');
+        
+        containerLightBox.classList.remove('fadeIn');
+        
+        imageLightBox.classList.remove('fadeIn');
+        imageLightBox.src = 'data:image/gif;base64,R0lGODlhAQABAIAAAP///////yH5BAEKAAEALAAAAAABAAEAAAICTAEAOw==';
+        imageLightBox.alt = '';
+        
         activedElement.focus();
         removeEvents();
     };
@@ -75,7 +87,7 @@
         // e.stopPropagation();
         e.preventDefault();
         
-        removeLightBox();
+        hideLightBox();
     };
     
     const keyHandler = (e) => {
@@ -88,23 +100,20 @@
         // e.stopPropagation();
         e.preventDefault();
         
-        removeLightBox();
+        hideLightBox();
     };
     
-    const appendToBody = (element) => {
-        document.body.appendChild(element);
-        showLightBox();
-    };
-    
-    const newLightBox = (srcImg, dataAlt = '') => {
-        const {width, height} = getWindowDimensions();
-        const lightBox = createLightBox(srcImg, dataAlt, width, height);
+    const initLightBox = () => {
+        const lightBox = createLightBox();
         
-        appendToBody(lightBox);
+        document.body.appendChild(lightBox);
     };
+    
+    initLightBox();
 
-    for(let thumbnails = document.querySelectorAll('[data-lightbox]'), thumbnailsLen = thumbnails.length, i = 0; i < thumbnailsLen; i++) {
-        thumbnails[i].addEventListener('click', function(e) {
+    const thumbnails = [].slice.call(document.querySelectorAll('[data-lightbox]'));
+    thumbnails.forEach((thumbnail) => {
+        thumbnail.addEventListener('click', function(e) {
             const href = this.href;
             if(!href || !/\.(gif|jpg|jpeg|tiff|png|bmp)$/i.test(href)) {
                 return false;
@@ -115,7 +124,7 @@
              
             activedElement = this;
              
-            newLightBox(href, this.dataset.alt);
+            showLightBox(href, this.dataset.alt);
         });
-    }
+    });
 }());

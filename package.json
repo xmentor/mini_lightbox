@@ -1,10 +1,10 @@
 {
   "name": "mini_lightbox",
   "version": "1.0.0",
-  "description": "[Demo](https://xmentor.github.io/mini_lightbox/)",
-  "main": "js/lightbox.js",
+  "description": "Prosty lightbox do wyświetlania zdjęć w większym rozmiarze, bez użycia jQuery, bardzo lekki",
+  "main": "src/js/lightbox.js",
   "scripts": {
-    "lint": "eslint */**.js"
+    "test": "echo \"Error: no test specified\" && exit 1"
   },
   "repository": {
     "type": "git",
@@ -17,6 +17,26 @@
   },
   "homepage": "https://github.com/xmentor/mini_lightbox#readme",
   "devDependencies": {
-    "eslint": "^3.8.1"
+    "eslint": "^3.8.1",
+    "gulp": "^3.9.1",
+    "gulp-autoprefixer": "^3.1.1",
+    "gulp-closure-compiler": "^0.4.0",
+    "gulp-copy": "^1.0.0",
+    "gulp-cssmin": "^0.1.7",
+    "gulp-eslint": "^3.0.1",
+    "gulp-replace": "^0.5.4",
+    "gulp-string-replace": "^0.4.0"
+  },
+  "directories": {
+    "example": "example"
+  },
+  "dependencies": {
+    "gulp-closure-compiler": "^0.4.0",
+    "gulp": "^3.9.1",
+    "gulp-eslint": "^3.0.1",
+    "gulp-autoprefixer": "^3.1.1",
+    "gulp-copy": "^1.0.0",
+    "gulp-cssmin": "^0.1.7",
+    "gulp-string-replace": "^0.4.0"
   }
 }

@@ -30,7 +30,7 @@
         return {lightBox, containerLightBox, imageLightBox};
     };
     
-    const showLightBox = (src, alt) => {
+    const showLightBox = (src, alt = '') => {
         const {lightBox, containerLightBox, imageLightBox} = getElementsLightBox();
         const {width, height} = getMaxDimensions();
         const newImage = new Image();
@@ -42,6 +42,7 @@
         
         newImage.onload = function() {
             imageLightBox.src = this.src;
+            imageLightBox.alt = alt;
             
             lightBox.classList.remove('lightbox_load');
 
@@ -51,7 +52,6 @@
             containerLightBox.focus();
         };
         newImage.src = src;
-        newImage.alt = alt;
         
         document.addEventListener('click', clickHandler);
         document.addEventListener('keydown', keyHandler);

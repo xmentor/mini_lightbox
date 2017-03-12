@@ -4,7 +4,7 @@
 
 ## Użycie
 
-* Pobierz [pliki](https://github.com/xmentor/mini_lightbox/archive/functions.zip) - wersja oparta na funkcjach
+* Pobierz [pliki](https://github.com/xmentor/mini_lightbox/archive/master.zip)
 
 * Foldery wraz z plikami, które znajdują się w `dest` przenieś do swojego katalogu.
 

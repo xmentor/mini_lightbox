@@ -47,5 +47,3 @@ Temporary Items
 .apdisk
 node_modules
 .eslintrc.json
-dist
-dest

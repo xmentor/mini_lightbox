@@ -1,48 +1,50 @@
 (function(gulp) {
-    
     'use strict';
 
+    const sass = require('gulp-sass');
     const autoprefixer = require('gulp-autoprefixer');
     const cssmin = require('gulp-cssmin');
-    const eslint = require('gulp-eslint');
-    const closureCompiler = require('gulp-closure-compiler');
-    const copy = require('gulp-copy');
+    const webpack = require('webpack');
+    const gulpWebpack = require('gulp-webpack');
+    const webpackConfig = require('./config/bundler.js');
+    const browserSync = require('browser-sync');
+    const rename = require('gulp-rename');
 
-    gulp.task('autoprefixer', function() {
-        return gulp.src('src/css/*.css')
+    gulp.task('sass', () => {
+        return gulp.src('src/sass/lightbox.scss')
+            .pipe(sass().on('error', sass.logError))
             .pipe(autoprefixer({
-                browsers: ['last 2 versions'],
+                browsers: ['last 2 version'],
                 cascade: false
             }))
-            .pipe(gulp.dest('dest/css'));
-    });
-    gulp.task('cssmin', ['autoprefixer'], function() {
-        return gulp.src('dest/css/*.css')
             .pipe(cssmin())
-            .pipe(gulp.dest('dest/css'));
+            .pipe(rename({suffix: '.min'}))
+            .pipe(gulp.dest('dist/css'))
+            .pipe(gulp.dest('example/css'));
     });
-    gulp.task('lint', ['cssmin'], function() {
-        return gulp.src('src/js/*.js')
-            .pipe(eslint())
-            .pipe(eslint.format())
-            .pipe(eslint.failAfterError());
+
+    gulp.task('js', () => {
+        return gulp.src('src/js/index.js')
+            .pipe(gulpWebpack(webpackConfig, webpack))
+            .pipe(gulp.dest('dist/js'))
+            .pipe(gulp.dest('example/js'));
     });
-    gulp.task('jsCompiler', ['lint'], function() {
-        return gulp.src('src/js/lightbox.js')
-            .pipe(closureCompiler({fileName: 'lightbox.min.js',
-                                   compilerFlags: {
-                                       compilation_level: 'ADVANCED_OPTIMIZATIONS',
-                                       language_in: 'ECMASCRIPT6_STRICT',
-                                       language_out: 'ECMASCRIPT5_STRICT'
-                                   }
-                                  }))
-            .pipe(gulp.dest('dest/js'));
+
+    gulp.task('watch', (done) => {
+        gulp.watch('src/sass/**/*.scss', gulp.series(['sass']));
+        gulp.watch('src/js/**/*.js', gulp.series(['js']));
+
+        browserSync({
+            server: {
+                baseDir: ['example']
+            }
+        });
+
+        gulp.watch(['dist/css/*.css', 'dist/js/*.js']).on('change', browserSync.reload);
+
+        done();
     });
-    gulp.task('default', ['jsCompiler'], function() {
-       return gulp.src('src/lb-img/**')
-           .pipe(copy('dest', {prefix: 1}))
-           .pipe(gulp.dest('dest/lb-img'))
-           .pipe(gulp.dest('example/lb-img'));
-    });
+
+    gulp.task('default', gulp.series(['sass', 'js', 'watch']));
     
 }(require('gulp')));

@@ -1,0 +1,14 @@
+$color_white: #fff;
+$color_black: #000;
+
+$close_width: 30px;
+$close_height: 30px;
+$close_line: 2px;
+
+$transition_duration: 200ms;
+$transition_easing: ease-in-out;
+
+$loading: loading .6s $transition_easing 0s infinite alternate both paused;
+
+$z_index_lb: 9998;
+// $z_index_container: 9999;

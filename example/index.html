@@ -6,7 +6,7 @@
         <meta name="description" content="Prosty lightbox do wyświetlania zdjęć w większym rozmiarze, bez użycia jQuery, bardzo lekki">
         <meta name="viewport" content="width=device-width">
         <link rel="stylesheet" href="css/main.css">
-        <link rel="stylesheet" href="../dest/css/lightbox.css">
+        <link rel="stylesheet" href="css/lightbox.min.css">
     </head>
     <body>
         <header>
@@ -48,6 +48,9 @@
                 Copyright &copy; Kamil Kondratowicz
             </span>
         </footer>
-        <script src="../dest/js/lightbox.min.js"></script>
+        <script src="js/lightbox.min.js"></script>
+        <script>
+            const lb = lightbox();
+        </script>
     </body>
 </html>

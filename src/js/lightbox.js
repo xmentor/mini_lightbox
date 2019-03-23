@@ -1,130 +1,221 @@
-(function() {
-    'use strict';
-    
-    let activedElement;
-   
-    const getMaxDimensions = () => {
-        const width = window.innerWidth - 50;
-        const height = window.innerHeight - 100;
-        
-        return {width, height};
-    };
-    
-    const createLightBox = () => {
-        const lightBox = document.createElement('div');
-        
-        lightBox.classList.add('lightbox');
-        lightBox.classList.add('lightbox_none');
-        lightBox.classList.add('lightbox_load');
-        
-        lightBox.innerHTML = '<div class="lightbox__container" role="dialog" aria-labelledby="lb-img" aria-describedby="lb-info" tabindex="-1"><button class="lightbox__close close"><img src="lb-img/close.png" alt="Zamknij okno" class="close__img"></button><img src="data:image/gif;base64,R0lGODlhAQABAIAAAP///////yH5BAEKAAEALAAAAAABAAEAAAICTAEAOw==" alt="" class="lightbox__img" id="lb-img"><p class="lightbox__info" id="lb-info"><span class="visuallyhidden">Otworzono powiększenie zdjęcia. Naciśnij <kbd>ESC</kbd> lub <kbd>TAB</kbd>, aby je zamknąć.</span></p></div>';
-        
-        return lightBox;
-    };
+import debounce from 'lodash.debounce';
 
-    const getElementsLightBox = () => {
-        const lightBox = document.querySelector('.lightbox');
-        const containerLightBox = document.querySelector('.lightbox__container');
-        const imageLightBox = document.querySelector('.lightbox__img');
-        
-        return {lightBox, containerLightBox, imageLightBox};
-    };
-    
-    const showLightBox = (src, alt = '') => {
-        const {lightBox, containerLightBox, imageLightBox} = getElementsLightBox();
-        const {width, height} = getMaxDimensions();
-        const newImage = new Image();
+class Lightbox {
+    constructor(options) {
+        this.body = document.body;
 
-        lightBox.classList.remove('lightbox_none');
-        
-        imageLightBox.style.maxWidth = `${width}px`;
-        imageLightBox.style.maxHeight = `${height}px`;
-        
-        newImage.onload = function() {
-            imageLightBox.src = this.src;
-            imageLightBox.alt = alt;
-            
-            lightBox.classList.remove('lightbox_load');
+        this.options = this.mergeOptions(options);
+        this.selector = this.options.selector;
+        this.extensions = this.options.extensions;
+        this.info = this.options.info;
 
-            containerLightBox.classList.add('fadeIn');
-            imageLightBox.classList.add('fadeIn');
-            
-            containerLightBox.focus();
+        this.thumbnails = [...document.querySelectorAll(this.selector)];
+        this.activedElement = null;
+        this.defaultSrc = 'data:image/gif;base64,R0lGODlhAQABAIAAAP///////yH5BAEKAAEALAAAAAABAAEAAAICTAEAOw==';
+
+        this.maxDimensions = this.getMaxDimensions();
+
+        this.escKeyCode = 27;
+
+        this.clickHandler = this.clickHandler.bind(this);
+        this.keyHandler = this.keyHandler.bind(this);
+        this.thumbnailClickHandler = this.thumbnailClickHandler.bind(this);
+        this.resiezHandler = debounce(this.resiezHandler.bind(this), 150);
+
+        this.init();
+        this.bind();
+    }
+
+    mergeOptions(options) {
+        const defaultOptions = {
+            selector: '[data-lightbox]',
+            extensions: /\.(gif|jpg|jpeg|tiff|png|bmp|svg)$/i,
+            info: 'Otworzono powiększenie zdjęcia.'
         };
-        newImage.src = src;
-        
-        document.addEventListener('click', clickHandler);
-        document.addEventListener('keydown', keyHandler);
-    };
-    
-    const removeEvents = () => {
-        document.removeEventListener('click', clickHandler);
-        document.removeEventListener('keydown', keyHandler);
-    };
-    
-    const hideLightBox = () => {
-        const {lightBox, containerLightBox, imageLightBox} = getElementsLightBox();
-        
-        lightBox.classList.add('lightbox_none');
-        lightBox.classList.add('lightbox_load');
-        
-        containerLightBox.classList.remove('fadeIn');
-        
-        imageLightBox.classList.remove('fadeIn');
-        imageLightBox.src = 'data:image/gif;base64,R0lGODlhAQABAIAAAP///////yH5BAEKAAEALAAAAAABAAEAAAICTAEAOw==';
-        imageLightBox.alt = '';
-        
-        activedElement.focus();
-        removeEvents();
-    };
-    
-    const clickHandler = (e) => {
-        const target = e.target;
-        if(target.classList.contains('lightbox__img')) {
-            return false;
-        }
-        
-        // e.stopPropagation();
-        e.preventDefault();
-        
-        hideLightBox();
-    };
-    
-    const keyHandler = (e) => {
-        const tabKeyCode = 9;
-        const escKeyCode = 27;
-        if(e.keyCode !== escKeyCode && e.keyCode !== tabKeyCode) {
-            return false;
-        }
-        
-        // e.stopPropagation();
-        e.preventDefault();
-        
-        hideLightBox();
-    };
-    
-    const initLightBox = () => {
-        const lightBox = createLightBox();
-        
-        document.body.appendChild(lightBox);
-    };
-    
-    initLightBox();
 
-    const thumbnails = [].slice.call(document.querySelectorAll('[data-lightbox]'));
-    thumbnails.forEach((thumbnail) => {
-        thumbnail.addEventListener('click', function(e) {
-            const href = this.href;
-            if(!href || !/\.(gif|jpg|jpeg|tiff|png|bmp)$/i.test(href)) {
-                return false;
-            }
-             
-            e.preventDefault();
-            e.stopPropagation();
-             
-            activedElement = this;
-             
-            showLightBox(href, this.dataset.alt);
+        return {
+            ...defaultOptions,
+            ...options
+        };
+    }
+
+    getMaxDimensions() {
+        const maxWidth = window.innerWidth - 50;
+        const maxHeight = window.innerHeight - 150;
+        
+        return { 
+            maxWidth, 
+            maxHeight 
+        };
+    }
+
+    createLightbox() {
+        const lightbox = document.createElement('div');
+        
+        lightbox.classList.add('lightbox');
+        lightbox.classList.add('lightbox--hidden');
+        lightbox.setAttribute('role', 'dialog');
+        lightbox.setAttribute('tabindex', -1);
+        lightbox.setAttribute('aria-describedby', 'lb-info');
+
+        lightbox.innerHTML = `
+            <div class="lightbox-container">
+                <img src="${this.defaultSrc}" alt="" class="lightbox-img" id="lb-img">
+                <p class="lightbox-info visuallyhidden" id="lb-info">${this.info} Naciśnij <kbd>ESC</kbd>, aby zamknąć okno.</p>
+                <button class="lightbox-close">
+                    <span class="visuallyhidden">Zamknij okno</span>
+                </button>
+            </div>`;
+        
+        return lightbox;
+    }
+
+    getElements() {
+        const lightbox = document.querySelector('.lightbox');
+        const lightboxContainer = lightbox.querySelector('.lightbox-container');
+        const lightboxImage = lightbox.querySelector('.lightbox-img');
+        
+        return {
+            lightbox, 
+            lightboxContainer, 
+            lightboxImage
+        };
+    }
+
+    fetchImage(url) {
+        return new Promise((resolve, reject) => {
+            const image = new Image();
+
+            image.addEventListener('load', resolve);
+            image.addEventListener('error', reject);
+            image.src = url;
         });
-    });
-}());
+    }
+
+    setMaxDimensions(dimensions) {
+        const { maxWidth, maxHeight } = dimensions;
+
+        this.lightboxImage.style.maxWidth = `${maxWidth}px`;
+        this.lightboxImage.style.maxHeight = `${maxHeight}px`;
+    }
+
+    show(src, alt = '') {
+        this.lightbox.classList.remove('lightbox--hidden');
+        this.lightbox.classList.add('lightbox--loading');
+
+        this.setMaxDimensions(this.maxDimensions);
+
+        this.fetchImage(src).then(() => {
+            this.lightbox.classList.remove('lightbox--loading');
+
+            this.lightboxImage.src = src;
+            this.lightboxImage.alt = alt;
+            
+            this.lightbox.focus();
+        }).catch((error) => {
+            this.lightbox.classList.add('lightbox--hidden');
+            this.lightbox.classList.remove('lightbox--loading');
+            throw new Error(error);
+        });
+    }
+
+    hide() {
+        this.lightbox.classList.add('lightbox--hidden');
+
+        this.lightboxImage.src = this.defaultSrc;
+        this.lightboxImage.alt = '';
+        
+        this.activedElement.focus();
+    }
+
+    IsVisible() {
+        return !this.lightbox.classList.contains('lightbox--hidden');
+    }
+
+    clickHandler(e) {
+        const { target } = e;
+
+        if(target.classList.contains('lightbox-img') || !this.IsVisible()) {
+            return false;
+        }
+        
+        e.preventDefault();
+        this.hide();
+    }
+
+    keyHandler(e) {
+        const { keyCode } = e;
+
+        if(keyCode !== this.escKeyCode || !this.IsVisible()) {
+            return false;
+        }
+
+        e.preventDefault();
+        this.hide();
+    }
+
+    resiezHandler(e) {
+        this.maxDimensions = this.getMaxDimensions();
+
+        this.setMaxDimensions(this.maxDimensions);
+    }
+    
+    init() {
+        const lightbox = this.createLightbox();
+        
+        document.body.appendChild(lightbox);
+
+        this.lightboxElements = this.getElements();
+        this.lightbox = this.lightboxElements.lightbox;
+        this.lightboxContainer = this.lightboxElements.lightboxContainer;
+        this.lightboxImage = this.lightboxElements.lightboxImage;
+    }
+
+    thumbnailClickHandler(e) { 
+        const { currentTarget } = e;
+        const { href } = currentTarget;
+
+        if(!href || !this.extensions.test(href)) {
+           return false;
+        }
+        
+        e.preventDefault();
+        e.stopPropagation();
+        
+        this.activedElement = currentTarget;
+        
+        this.show(href, currentTarget.dataset.alt);
+    }
+
+    bind() {
+        if(this.thumbnails.length > 0) {
+            this.thumbnails.forEach((thumbnail) => {
+                thumbnail.classList.add('lb-initialized');
+                thumbnail.addEventListener('click', this.thumbnailClickHandler);
+            });
+        }
+
+        document.addEventListener('click', this.clickHandler);
+        document.addEventListener('keydown', this.keyHandler);
+        window.addEventListener('resize', this.resiezHandler);
+    }
+
+    destroy(removeElement = false) {
+        if(this.lightbox !== null && removeElement) {
+            this.lightbox.parentNode.removeChild(this.lightbox);
+        }
+
+        if(this.thumbnails.length > 0) {
+            this.thumbnails.forEach((thumbnail) => {
+                thumbnail.classList.remove('lb-initialized');
+                thumbnail.removeEventListener('click', this.thumbnailClickHandler);
+            });
+        }
+
+        document.removeEventListener('click', this.clickHandler);
+        document.removeEventListener('keydown', this.keyHandler);
+        window.removeEventListener('resize', this.resiezHandler);
+    }
+}
+
+export default Lightbox;

@@ -1,10 +1,12 @@
 {
   "name": "mini_lightbox",
-  "version": "1.0.0",
+  "version": "2.0.0",
   "description": "Prosty lightbox do wyświetlania zdjęć w większym rozmiarze, bez użycia jQuery, bardzo lekki",
-  "main": "src/js/lightbox.js",
+  "main": "src/js/index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "start": "set NODE_ENV=development&&gulp",
+    "prod": "set NODE_ENV=production&&gulp",
+    "dev": "set NODE_ENV=development&&gulp"
   },
   "repository": {
     "type": "git",
@@ -17,26 +19,27 @@
   },
   "homepage": "https://github.com/xmentor/mini_lightbox#readme",
   "devDependencies": {
-    "eslint": "^3.8.1",
-    "gulp": "^3.9.1",
+    "babel-core": "^6.26.3",
+    "babel-loader": "^7.1.5",
+    "babel-plugin-add-module-exports": "^1.0.0",
+    "babel-preset-es2015": "^6.24.1",
+    "babel-preset-stage-2": "^6.24.1",
+    "browser-sync": "^2.26.3",
+    "gulp": "^4.0.0",
     "gulp-autoprefixer": "^3.1.1",
-    "gulp-closure-compiler": "^0.4.0",
-    "gulp-copy": "^1.0.0",
-    "gulp-cssmin": "^0.1.7",
-    "gulp-eslint": "^3.0.1",
-    "gulp-replace": "^0.5.4",
-    "gulp-string-replace": "^0.4.0"
+    "gulp-cssmin": "^0.2.0",
+    "gulp-livereload": "^4.0.1",
+    "gulp-rename": "^1.4.0",
+    "gulp-sass": "^3.1.0",
+    "gulp-string-replace": "^0.4.0",
+    "gulp-webpack": "^1.5.0",
+    "webpack": "^4.20.2",
+    "webpack-cli": "^3.1.2"
   },
   "directories": {
     "example": "example"
   },
   "dependencies": {
-    "gulp-closure-compiler": "^0.4.0",
-    "gulp": "^3.9.1",
-    "gulp-eslint": "^3.0.1",
-    "gulp-autoprefixer": "^3.1.1",
-    "gulp-copy": "^1.0.0",
-    "gulp-cssmin": "^0.1.7",
-    "gulp-string-replace": "^0.4.0"
+    "lodash.debounce": "^4.0.8"
   }
 }
